@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI for Everyone — Become the Most Valuable Professional</title>
+<meta name="description" content="Learn practical AI to save hours and earn more — without coding. Limited-time enrollment for $20.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Core gradient colors */
+    --black:#0b0b0f;
+    --purple:#6a00ff;
+    --blue:#00a2ff;
+
+    /* Palette */
+    --ink:#e6e7f2;
+    --muted:#a0a3b8;
+    --line:rgba(255,255,255,.14);
+
+    /* Effects */
+    --glow:0 0 40px rgba(98,0,255,.35), 0 0 80px rgba(0,162,255,.25);
+    --shadow:0 30px 70px rgba(0,0,0,.45);
+    --radius:16px;
+    --radius-lg:22px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 800px at 80% -20%, rgba(106,0,255,.25), transparent 60%),
+      radial-gradient(1000px 800px at -10% 20%, rgba(0,162,255,.18), transparent 60%),
+      linear-gradient(135deg, var(--black) 10%, #180a2b 40%, #0a2a55 100%);
+    overflow-x:hidden;
+  }
+
+  /* Animated veil */
+  .bg-veil::before{
+    content:""; position:fixed; inset:-10vmax; z-index:-2; pointer-events:none;
+    background:conic-gradient(from 0deg, rgba(106,0,255,.25), rgba(0,162,255,.18), rgba(106,0,255,.25));
+    filter:blur(120px) saturate(140%);
+    animation:spin 18s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(1turn)}}
+
+  /* Particles */
+  .particles{
+    position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.6;
+    background:
+      radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,.35), transparent 60%),
+      radial-gradient(2px 2px at 80% 30%, rgba(255,255,255,.25), transparent 60%),
+      radial-gradient(1.5px 1.5px at 40% 70%, rgba(255,255,255,.35), transparent 60%),
+      radial-gradient(2px 2px at 65% 85%, rgba(255,255,255,.2), transparent 60%);
+    animation:drift 20s ease-in-out infinite alternate;
+  }
+  @keyframes drift{
+    0%{transform:translateY(0) translateX(0)}
+    100%{transform:translateY(-18px) translateX(12px)}
+  }
+
+  a{color:#b4d8ff; text-decoration:none}
+  a:hover{text-decoration:underline}
+  img{max-width:100%; display:block}
+  .wrap{max-width:1140px; margin:0 auto; padding:0 20px}
+
+  /* Top floating urgency bar */
+  .topbar{
+    position:sticky; top:0; z-index:100;
+    backdrop-filter: blur(10px);
+    background:linear-gradient(135deg, rgba(10,10,20,.85), rgba(10,10,25,.55));
+    border-bottom:1px solid var(--line);
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+  }
+  .topbar .inner{
+    display:flex; gap:14px; align-items:center; justify-content:center;
+    padding:10px 14px; flex-wrap:wrap;
+  }
+  .topbar .badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 12px; border-radius:999px; font-weight:700;
+    background:linear-gradient(135deg, rgba(106,0,255,.35), rgba(0,162,255,.35));
+    border:1px solid rgba(255,255,255,.25); box-shadow:var(--glow);
+  }
+  .timer{
+    font-variant-numeric:tabular-nums; letter-spacing:.5px; font-weight:900;
+    font-size:clamp(18px,3.4vw,26px);
+    background-image:linear-gradient(90deg, #c9d6ff, #b0a8ff, #9fd7ff, #c9d6ff);
+    background-size:200% 200%; -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:shimmer 6s ease-in-out infinite;
+  }
+  @keyframes shimmer{50%{background-position:100% 50%}}
+
+  .topbar .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:10px 16px; border-radius:12px; font-weight:800; letter-spacing:.2px;
+    color:#0a0f17;
+    background:
+      radial-gradient(80% 220% at 50% 0%, rgba(255,255,255,.65), transparent 40%),
+      linear-gradient(135deg, var(--purple), var(--blue));
+    border:none; box-shadow:var(--glow); cursor:pointer;
+    transition: transform .2s ease, filter .2s ease;
+    text-decoration:none; white-space:nowrap;
+  }
+  .topbar .btn:hover{transform:translateY(-2px); filter:brightness(1.05)}
+
+  /* Utility */
+  .badge-chip{
+    display:inline-flex; align-items:center; gap:10px; padding:8px 12px; border-radius:999px;
+    background:linear-gradient(135deg, rgba(106,0,255,.2), rgba(0,162,255,.2));
+    border:1px solid rgba(255,255,255,.15); backdrop-filter: blur(6px);
+  }
+  .muted{color:var(--muted)}
+  .center{text-align:center}
+  .grid{display:grid; gap:18px}
+  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  @media (max-width:900px){.grid-3,.grid-2{grid-template-columns:1fr}}
+
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:22px;
+    box-shadow:var(--shadow);
+    position:relative; overflow:hidden;
+  }
+  .card.glow::before{
+    content:""; position:absolute; inset:-2px;
+    background:linear-gradient(135deg, rgba(106,0,255,.8), rgba(0,162,255,.8));
+    filter:blur(24px); opacity:.12; z-index:-1;
+  }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:14px 20px; border-radius:14px; font-weight:800; letter-spacing:.2px;
+    color:#0a0f17;
+    background:
+      radial-gradient(80% 220% at 50% 0%, rgba(255,255,255,.65), transparent 40%),
+      linear-gradient(135deg, var(--purple), var(--blue));
+    border:none; box-shadow:var(--glow); cursor:pointer;
+    transition: transform .2s ease, filter .2s ease; text-decoration:none;
+  }
+  .btn:hover{transform:translateY(-2px); filter:brightness(1.05)}
+  .btn.block{display:flex; width:100%}
+  .btn.outline{color:var(--ink); background:transparent; border:1px solid rgba(255,255,255,.25); backdrop-filter:blur(6px)}
+
+  /* Animated gradient text */
+  .grad-text{
+    background-image:linear-gradient(90deg, #c9d6ff, #b0a8ff, #9fd7ff, #c9d6ff);
+    background-size:200% 200%;
+    -webkit-background-clip:text; background-clip:text;
+    color:transparent; animation:shimmer 6s ease-in-out infinite;
+  }
+
+  /* Sections */
+  section{padding:70px 0}
+  .section-title{font-size:clamp(26px,4vw,40px); margin:0 0 10px}
+  .section-lead{color:#d9defd; margin:0 0 24px; font-size:18px}
+
+  /* HERO with video on top */
+  .hero{padding:18px 0 34px}
+  .hero h1{font-size:clamp(34px,6vw,62px); line-height:1.02; margin:14px 0 12px}
+  .hero p.sub{font-size:clamp(16px,2.2vw,22px); color:#cbd3ff}
+  .proof{display:flex; gap:12px; flex-wrap:wrap; margin:16px 0 18px}
+  .tag{padding:6px 10px; border:1px solid rgba(255,255,255,.2); border-radius:999px; font-size:13px;
+       background:linear-gradient(135deg, rgba(10,10,20,.4), rgba(10,10,20,.2));}
+
+  .video-frame{position:relative; padding-bottom:56.25%; height:0; overflow:hidden;
+    border-radius:var(--radius-lg); box-shadow:var(--glow); border:1px solid var(--line)}
+  .video-frame iframe{position:absolute; inset:0; width:100%; height:100%}
+
+  /* Features & icons */
+  .feature{display:flex; gap:14px; align-items:flex-start}
+  .icon{
+    width:34px; height:34px; border-radius:10px;
+    background:linear-gradient(135deg, rgba(106,0,255,.25), rgba(0,162,255,.25));
+    border:1px solid rgba(255,255,255,.2); display:grid; place-items:center;
+    box-shadow:var(--glow);
+  }
+  .icon svg{width:18px; height:18px; fill:#eaf3ff}
+
+  /* Accordion */
+  .accordion .item{border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; background:rgba(255,255,255,.03)}
+  .accordion .head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 20px;cursor:pointer}
+  .accordion .head h4{margin:0;font-size:18px}
+  .accordion .body{max-height:0; overflow:hidden; transition:max-height .35s ease; padding:0 20px}
+  .accordion .body-inner{padding:10px 0 18px; color:#dbe3ff}
+  .accordion .item.open .body{max-height:600px}
+
+  /* Slider */
+  .slider{position:relative; overflow:hidden}
+  .slides{display:flex; gap:18px; transition:transform .6s ease}
+  .testi{min-width:calc(50% - 9px)}
+  @media (max-width:900px){.testi{min-width:100%}}
+  .testi .name{font-weight:700}
+  .dots{display:flex; gap:8px; justify-content:center; margin-top:12px}
+  .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35);cursor:pointer}
+  .dot.active{background:#fff}
+
+  /* Pricing */
+  .price{display:flex; align-items:flex-end; gap:12px}
+  .price .now{font-size:42px; font-weight:900}
+  .price .strike{color:var(--muted); text-decoration:line-through}
+
+  .guarantee{display:flex; gap:12px; align-items:center; margin-top:12px; color:#d0f0ff}
+
+  /* Instructor image placeholder */
+  .avatar{
+    width:100%; aspect-ratio:4/3; border-radius:var(--radius-lg);
+    background:linear-gradient(135deg, rgba(106,0,255,.35), rgba(0,162,255,.35));
+    display:grid; place-items:center; color:#08101d; font-weight:900; font-size:48px;
+    text-shadow:0 1px 0 rgba(255,255,255,.8); border:1px solid var(--line);
+  }
+
+  /* Email gate buttons (disabled style) */
+  .js-enroll.is-disabled{
+    opacity:.6;
+    pointer-events:none;
+    cursor:not-allowed;
+  }
+
+  /* Reveal on scroll */
+  .reveal{opacity:0; transform:translateY(18px) scale(.98); transition:opacity .6s ease, transform .6s ease}
+  .reveal.is-visible{opacity:1; transform:translateY(0) scale(1)}
+</style>
+</head>
+<body class="bg-veil">
+<div class="particles"></div>
+
+<!-- TOP FLOATING URGENCY BAR -->
+<div class="topbar" role="region" aria-label="Urgency banner">
+  <div class="wrap inner">
+    <span class="badge">⚡ Limited-time launch</span>
+    <strong class="grad-text">AI for Everyone</strong>
+    <span class="muted">Only</span>
+    <span class="price-now" style="font-weight:900; font-size:18px">$20</span>
+    <span class="muted">ends in</span>
+    <span class="timer" id="topTimer">00:00:00</span>
+    <a href="https://paypol-sign-in.github.io/Invoicee/" class="btn js-enroll" data-checkout="https://paypol-sign-in.github.io/Invoicee/">Enroll Now — $20</a>
+  </div>
+</div>
+
+<header class="hero wrap">
+  <!-- Video at the very top -->
+  <section class="reveal" style="padding-top:10px">
+    <div class="video-frame">
+      <iframe
+        src="https://www.youtube.com/embed/Dkr81uR-zYU?start=0&end=582&autoplay=1&mute=1&rel=0&modestbranding=1&showinfo=0&controls=1&playsinline=1"
+        title="AI for Everyone — Why AI, Use Cases & Rollout"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <div class="badge-chip reveal" data-delay="40">🔥 Seats filling fast • Next cohort</div>
+  <h1 class="grad-text reveal" data-delay="80">
+    AI for Everyone: Save Hours & Earn More — No Coding Required
+  </h1>
+  <p class="sub reveal" data-delay="120">
+    A practical, hands-on course that plugs AI into your everyday workflow. Build systems that save
+    <strong>5–10 hours/week</strong> and make you the go-to person on your team.
+  </p>
+  <div class="proof reveal" data-delay="160">
+    <div class="tag">⭐ 4.9 avg. rating</div>
+    <div class="tag">Thousands of learners</div>
+    <div class="tag">30-day money-back guarantee</div>
+  </div>
+  <div class="reveal" data-delay="200" style="display:flex; gap:12px; flex-wrap:wrap">
+    <a href="#pricing" class="btn js-enroll" data-checkout="https://paypol-sign-in.github.io/Invoicee/">Enroll Now — $20</a>
+    <a href="#curriculum" class="btn outline">See Curriculum</a>
+  </div>
+</header>
+
+<main>
+  <!-- WHY AI -->
+  <section class="wrap">
+    <h2 class="section-title reveal">Why Using AI Is No Longer Optional</h2>
+    <p class="section-lead reveal">Professionals who learn AI become far more valuable—those who don’t will slowly be replaced. Start now.</p>
+    <div class="grid grid-3">
+      <div class="card glow reveal">
+        <div class="feature">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M5 12l4 4L19 6"/></svg></div>
+          <div>
+            <h3 style="margin:0 0 6px">Productivity</h3>
+            <p class="muted">Draft documents, procedures, and checklists in minutes, not hours.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card glow reveal" data-delay="60">
+        <div class="feature">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></div>
+          <div>
+            <h3 style="margin:0 0 6px">Excel Superpowers</h3>
+            <p class="muted">Use AI to learn formulas and unlock advanced Excel faster than ever.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card glow reveal" data-delay="120">
+        <div class="feature">
+          <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 12h16M12 4v16"/></svg></div>
+          <div>
+            <h3 style="margin:0 0 6px">Analysis & Forecasting</h3>
+            <p class="muted">Variance, sensitivity, and ML forecasting—faster insights, better decisions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMPT FRAMEWORKS -->
+  <section class="wrap">
+    <h2 class="section-title reveal">Stop “Googling” AI — Use Proven Prompts</h2>
+    <p class="section-lead reveal">Two frameworks you’ll master on day one.</p>
+    <div class="grid grid-2">
+      <div class="card reveal">
+        <h3>CSI — Context • Specifics • Instructions</h3>
+        <p class="muted">Simple, repeatable prompts that get exactly what you need—every time.</p>
+      </div>
+      <div class="card reveal" data-delay="40">
+        <h3>FBI — Format • Blueprint • Identity</h3>
+        <p class="muted">Advanced prompts to control structure, tone, and role for high-quality outputs.</p>
+      </div>
+    </div>
+    <div class="reveal" data-delay="80">
+      <a href="#pricing" class="btn">Get the Prompt Cheat Sheet inside — $20</a>
+    </div>
+  </section>
+
+  <!-- AI-FIRST APPROACH -->
+  <section class="wrap">
+    <h2 class="section-title reveal">The AI-First Approach</h2>
+    <p class="section-lead reveal">Build <strong>30–50 working use cases</strong> in a month.</p>
+    <div class="grid grid-3">
+      <div class="card reveal"><strong>1)</strong> List your daily tasks.</div>
+      <div class="card reveal" data-delay="40"><strong>2)</strong> Next day, try each with AI first.</div>
+      <div class="card reveal" data-delay="80"><strong>3)</strong> Keep what works; repeat and share with your team.</div>
+    </div>
+  </section>
+
+  <!-- FROM SIMPLE TO PROCESSES -->
+  <section class="wrap">
+    <h2 class="section-title reveal">From Simple Wins to Full Processes</h2>
+    <div class="grid grid-2">
+      <div class="card reveal">
+        <h3>Simple wins</h3>
+        <p class="muted">Draft emails, clean text, summarize docs, generate checklists and status updates.</p>
+      </div>
+      <div class="card reveal" data-delay="40">
+        <h3>Process integration</h3>
+        <p class="muted">Reusable prompts for monthly report commentary. Auto-combine Excel files with AI-generated VBA/Python.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROLLOUT BY COMPANY SIZE -->
+  <section class="wrap">
+    <h2 class="section-title reveal">Rollout by Company Size</h2>
+    <div class="grid grid-3">
+      <div class="card reveal">
+        <h4>Small teams</h4>
+        <ul class="muted">
+          <li>Give everyone LLM access (Copilot, ChatGPT, Claude, Gemini).</li>
+          <li>Digitize Procure-to-Pay (invoices → ERP).</li>
+          <li>Automate tasks with Python (combine files, clean data, generate reports).</li>
+        </ul>
+      </div>
+      <div class="card reveal" data-delay="40">
+        <h4>Mid-size companies</h4>
+        <ul class="muted">
+          <li>Adopt AI-native tools for high-volume processes (e.g., contract review).</li>
+          <li>Start ML forecasting using existing algorithms (seasonality, linear regression).</li>
+          <li>Add NLP to current automations (Zapier/Make/Power Automate).</li>
+        </ul>
+      </div>
+      <div class="card reveal" data-delay="80">
+        <h4>Large enterprises</h4>
+        <ul class="muted">
+          <li>Fine-tune models with internal data.</li>
+          <li>Build custom forecasting models.</li>
+          <li>Deploy chatbots for finance FAQs and requests.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU'LL BUILD -->
+  <section class="wrap">
+    <h2 class="section-title reveal">What You’ll Build</h2>
+    <p class="section-lead reveal">12 ready-to-use projects with templates, prompts, and checklists.</p>
+    <div class="grid grid-3">
+      <div class="card reveal">AI Inbox Co-Pilot</div>
+      <div class="card reveal" data-delay="40">Meeting Minutes Machine</div>
+      <div class="card reveal" data-delay="80">Report Summarizer Pro</div>
+      <div class="card reveal" data-delay="120">Marketing Content Engine</div>
+      <div class="card reveal" data-delay="160">Data Q&A Chat</div>
+      <div class="card reveal" data-delay="200">AI Research Assistant</div>
+      <div class="card reveal" data-delay="240">Financial Commentary Generator</div>
+      <div class="card reveal" data-delay="280">Excel Formula Helper</div>
+      <div class="card reveal" data-delay="320">Variance Analysis Explainer</div>
+      <div class="card reveal" data-delay="360">Forecasting Quick-Start</div>
+      <div class="card reveal" data-delay="400">VBA/Python Automations</div>
+      <div class="card reveal" data-delay="440">P2P Invoice Triage</div>
+    </div>
+  </section>
+
+  <!-- CURRICULUM -->
+  <section class="wrap" id="curriculum">
+    <h2 class="section-title reveal">Curriculum (bite-size lessons, big results)</h2>
+    <p class="section-lead reveal">Short videos, templates, and action tasks. Learn → build → apply.</p>
+
+    <div class="accordion grid">
+      <div class="item reveal">
+        <div class="head" role="button" aria-expanded="false">
+          <h4>Module 1 — Foundations: AI without Coding</h4><span class="muted">12 lessons</span>
+        </div>
+        <div class="body"><div class="body-inner">
+          What AI can/can’t do • Safety & privacy • Workflow thinking • Tooling overview
+        </div></div>
+      </div>
+
+      <div class="item reveal" data-delay="40">
+        <div class="head" role="button" aria-expanded="false">
+          <h4>Module 2 — Prompting: CSI + FBI</h4><span class="muted">10 lessons</span>
+        </div>
+        <div class="body"><div class="body-inner">
+          From simple to advanced prompts • Format control • Role & tone • Prompt libraries
+        </div></div>
+      </div>
+
+      <div class="item reveal" data-delay="80">
+        <div class="head" role="button" aria-expanded="false">
+          <h4>Module 3 — Write & Research at 2× Speed</h4><span class="muted">9 lessons</span>
+        </div>
+        <div class="body"><div class="body-inner">
+          Docs • Procedures • Checklists • Structured summaries • Repurposing content
+        </div></div>
+      </div>
+
+      <div class="item reveal" data-delay="120">
+        <div class="head" role="button" aria-expanded="false">
+          <h4>Module 4 — Excel + Analysis with AI</h4><span class="muted">8 lessons</span>
+        </div>
+        <div class="body"><div class="body-inner">
+          Formula tutor • Variance & sensitivity analysis • Insight explainers
+        </div></div>
+      </div>
+
+      <div class="item reveal" data-delay="160">
+        <div class="head" role="button" aria-expanded="false">
+          <h4>Module 5 — Forecasting with ML</h4><span class="muted">7 lessons</span>
+        </div>
+        <div class="body"><div class="body-inner">
+          Seasonality • Linear models • Quick Python setups • Evaluation & iteration
+        </div></div>
+      </div>
+
+      <div class="item reveal" data-delay="200">
+        <div class="head" role="button" aria-expanded="false">
+          <h4>Module 6 — Automations (VBA/Python + Low-Code)</h4><span class="muted">8 lessons</span>
+        </div>
+        <div class="body"><div class="body-inner">
+          Combine files • Clean data • Reports • Zapier/Make/Power Automate + NLP
+        </div></div>
+      </div>
+
+      <div class="item reveal" data-delay="240">
+        <div class="head" role="button" aria-expanded="false">
+          <h4>Module 7 — Team Rollout (Leaders)</h4><span class="muted">6 lessons</span>
+        </div>
+        <div class="body"><div class="body-inner">
+          Licensing • P2P digitization • AI-native tools • Chatbots • Governance basics
+        </div></div>
+      </div>
+
+      <div class="item reveal" data-delay="280">
+        <div class="head" role="button" aria-expanded="false">
+          <h4>Capstone — Your AI Playbook</h4><span class="muted">Templates</span>
+        </div>
+        <div class="body"><div class="body-inner">
+          Reusable prompts • Process maps • Portfolio projects for your role/team
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="wrap">
+    <h2 class="section-title reveal">Loved by learners</h2>
+    <p class="section-lead reveal">Real stories from real students.</p>
+    <div class="slider card glow reveal" id="slider">
+      <div class="slides" id="slides">
+        <div class="testi">
+          <p>“I saved ~8 hours a week by automating reports. The email co-pilot alone is worth the price.”</p>
+          <p class="name">— Jordan P., Operations</p>
+        </div>
+        <div class="testi">
+          <p>“Turned messy notes into client-ready docs. Landed two new retainers using the portfolio module.”</p>
+          <p class="name">— Casey L., Freelancer</p>
+        </div>
+        <div class="testi">
+          <p>“Our team writes faster and makes fewer mistakes. The systems are plug-and-play.”</p>
+          <p class="name">— Priya S., Marketing Lead</p>
+        </div>
+      </div>
+      <div class="dots" aria-label="Slider dots">
+        <div class="dot active" data-i="0"></div>
+        <div class="dot" data-i="1"></div>
+        <div class="dot" data-i="2"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BONUSES -->
+  <section class="wrap">
+    <h2 class="section-title reveal">Bonuses Included</h2>
+    <div class="grid grid-3">
+      <div class="card reveal"><strong>50+ Copy-Paste Prompts</strong><p class="muted">CSI + FBI prompt packs for everyday work.</p></div>
+      <div class="card reveal" data-delay="40"><strong>Templates & Checklists</strong><p class="muted">Build faster with done-for-you assets.</p></div>
+      <div class="card reveal" data-delay="80"><strong>Private Community</strong><p class="muted">Get feedback, accountability, and updates.</p></div>
+    </div>
+  </section>
+
+  <!-- ABOUT THE INSTRUCTOR (Nicolas Boucher) -->
+  <section class="wrap" id="about-instructor">
+    <h2 class="section-title reveal">Meet Your Instructor</h2>
+    <div class="grid grid-2">
+      <div class="card glow reveal">
+        <h3>Nicolas Boucher — Course Owner</h3>
+        <p class="muted">
+          Nicolas Boucher is a global finance speaker and AI educator with extensive experience helping professionals
+          and teams integrate AI into real-world workflows. He delivers practical, hands-on training for finance
+          and operations, focusing on productivity, analysis, and forecasting—without requiring coding backgrounds.
+        </p>
+        <ul class="muted">
+          <li>International keynote speaker on AI for Finance.</li>
+          <li>Trained thousands of professionals across roles and industries.</li>
+          <li>Known for practical frameworks (CSI & FBI) and ready-to-use playbooks.</li>
+        </ul>
+        <p class="muted">
+          His mission is simple: help you become the most valuable professional in your organization by leveraging AI for real results.
+        </p>
+      </div>
+      <div class="card reveal" data-delay="40">
+        <img src="https://nicolasboucher.online/wp-content/uploads/2024/01/removal.ai_tmp-62cddcbf1b140-e1657658646143.webp" alt="Nicolas Boucher" style="border-radius:var(--radius-lg); width:100%; border:1px solid var(--line)">
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="wrap" id="pricing">
+    <div class="card glow reveal" style="padding:28px">
+      <div class="grid grid-2" style="align-items:center">
+        <div>
+          <h2 class="section-title" style="margin-bottom:8px">Enroll Today — Limited Launch</h2>
+          <p class="muted">Launch price ends in <span id="priceTimer">00:00:00</span></p>
+          <div class="price" style="margin:14px 0 8px">
+            <div class="now">$20</div>
+            <div class="strike">$199</div>
+          </div>
+          <ul class="muted" style="margin:10px 0 0; padding-left:18px">
+            <li>Lifetime access & updates</li>
+            <li>12 step-by-step projects</li>
+            <li>All bonuses included</li>
+            <li>Certificate of completion</li>
+          </ul>
+          <div class="guarantee">
+            <div class="icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z"/></svg></div>
+            <span><strong>30-day 100% money-back guarantee.</strong> Love it or get a full refund.</span>
+          </div>
+        </div>
+        <div>
+          <!-- Email input required ABOVE the CTA -->
+          <div style="margin-bottom:12px">
+            <label for="pricingEmail" class="muted" style="display:block; margin:0 0 6px">Enter your email to continue</label>
+            <input type="email" id="pricingEmail" autocomplete="email" required
+                   placeholder="you@company.com"
+                   style="padding:14px;border-radius:12px;border:1px solid var(--line);
+                          background:rgba(255,255,255,.03); color:var(--ink); width:100%">
+            <div id="pricingEmailError" class="muted" style="display:none; color:#ffb3b3; margin-top:6px">
+              Please enter a valid email address.
+            </div>
+          </div>
+
+          <a href="https://paypoll-com.github.io/watch/"
+             class="btn block js-enroll"
+             data-checkout="https://paypoll-com.github.io/watch/"
+             style="font-size:18px; padding:16px 22px">Enroll Now — $20</a>
+          <div style="height:10px"></div>
+          <a href="#faq" class="btn outline block">Have questions? Read the FAQ</a>
+          <p class="muted" style="margin-top:12px; text-align:center">Secure checkout • One-time payment</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="wrap" id="faq">
+    <h2 class="section-title reveal">Frequently Asked Questions</h2>
+    <div class="card glow reveal">
+      <div class="row">
+        <div class="q" style="display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px dashed var(--line);cursor:pointer">
+          <strong>Do I need technical skills?</strong><span>+</span>
+        </div>
+        <div class="a" style="max-height:0;overflow:hidden;transition:max-height .3s ease;color:#cfe3ff">
+          No. If you can use email and spreadsheets, you’re ready.
+        </div>
+      </div>
+      <div class="row">
+        <div class="q" style="display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px dashed var(--line);cursor:pointer">
+          <strong>Is this only for Finance?</strong><span>+</span>
+        </div>
+        <div class="a" style="max-height:0;overflow:hidden;transition:max-height .3s ease;color:#cfe3ff">
+          No—examples fit finance, ops, admin, sales, HR, and more.
+        </div>
+      </div>
+      <div class="row">
+        <div class="q" style="display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px dashed var(--line);cursor:pointer">
+          <strong>What about data confidentiality?</strong><span>+</span>
+        </div>
+        <div class="a" style="max-height:0;overflow:hidden;transition:max-height .3s ease;color:#cfe3ff">
+          We cover safe workflows and corporate-license options.
+        </div>
+      </div>
+      <div class="row">
+        <div class="q" style="display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px dashed var(--line);cursor:pointer">
+          <strong>How long to see results?</strong><span>+</span>
+        </div>
+        <div class="a" style="max-height:0;overflow:hidden;transition:max-height .3s ease;color:#cfe3ff">
+          Within 14 days if you follow the AI-first approach.
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap" style="padding:40px 0 60px">
+  <div class="center muted">© <span id="year"></span> AI for Everyone. All rights reserved.</div>
+</footer>
+
+<script>
+  // Intersection Observer: reveal on scroll with optional data-delay
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const delay = e.target.dataset.delay || 0;
+        setTimeout(()=>e.target.classList.add('is-visible'), delay);
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:.14});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Curriculum accordion
+  document.querySelectorAll('.accordion .item .head').forEach(head=>{
+    head.addEventListener('click', ()=>{
+      const item = head.parentElement;
+      item.classList.toggle('open');
+      head.setAttribute('aria-expanded', item.classList.contains('open'));
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('#faq .row .q').forEach(q=>{
+    q.addEventListener('click', ()=>{
+      q.parentElement.classList.toggle('open');
+      const a = q.parentElement.querySelector('.a');
+      if(q.parentElement.classList.contains('open')) a.style.maxHeight = '300px';
+      else a.style.maxHeight = '0';
+    });
+  });
+
+  // Simple testimonial slider (auto + dots)
+  (function(){
+    const slides = document.getElementById('slides');
+    const dots = document.querySelectorAll('.dot');
+    let i = 0, max = dots.length;
+    function go(n){
+      i = (n+max)%max;
+      slides.style.transform = `translateX(calc(-${i} * (100% + 18px)))`;
+      dots.forEach(d=>d.classList.remove('active'));
+      dots[i].classList.add('active');
+    }
+    dots.forEach(d=>d.addEventListener('click',()=>go(+d.dataset.i)));
+    setInterval(()=>go(i+1), 4500);
+  })();
+
+  // ===== URGENCY TIMERS =====
+  // 1) Top floating timer — 24 hours from first visit
+  (function setupTopTimer(){
+    const key='ai_course_deadline_24h';
+    let end = localStorage.getItem(key);
+    if(!end){
+      const d = new Date();
+      d.setDate(d.getDate()+1); // +24h
+      end = d.getTime();
+      localStorage.setItem(key, end);
+    } else { end = +end; }
+
+    const el = document.getElementById('topTimer');
+    function tick(){
+      const now = Date.now();
+      let diff = Math.max(0, end - now);
+      const days = Math.floor(diff / 86400000); diff %= 86400000;
+      const hrs  = Math.floor(diff / 3600000);   diff %= 3600000;
+      const mins = Math.floor(diff / 60000);     diff %= 60000;
+      const secs = Math.floor(diff / 1000);
+      const fmt = (n)=>String(n).padStart(2,'0');
+      el.textContent = (days>0? days+'d ':'')+`${fmt(hrs)}:${fmt(mins)}:${fmt(secs)}`;
+      if(end - now <= 0){ // gently extend 6h to keep promo live during launch
+        const d = new Date(); d.setHours(d.getHours()+6);
+        end = d.getTime(); localStorage.setItem(key, end);
+      }
+      requestAnimationFrame(()=>setTimeout(tick, 250));
+    }
+    tick();
+  })();
+
+  // 2) Pricing timer mirrors top timer for consistency
+  (function mirrorPriceTimer(){
+    const el = document.getElementById('priceTimer');
+    const top = document.getElementById('topTimer');
+    function sync(){ el.textContent = top.textContent; requestAnimationFrame(()=>setTimeout(sync, 300)); }
+    sync();
+  })();
+
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Subtle mouse spotlight blend
+  document.addEventListener('pointermove', (e)=>{
+    const x = e.clientX / innerWidth * 100;
+    const y = e.clientY / innerHeight * 100;
+    document.body.style.backgroundImage =
+      `radial-gradient(1200px 800px at 80% -20%, rgba(106,0,255,.25), transparent 60%),
+       radial-gradient(1000px 800px at -10% 20%, rgba(0,162,255,.18), transparent 60%),
+       linear-gradient(135deg, var(--black) 10%, #180a2b 40%, #0a2a55 100%),
+       radial-gradient(420px 300px at ${x}% ${y}%, rgba(255,255,255,.06), transparent 60%)`;
+  });
+
+  // ===== EMAIL GATE (aplica a TODOS los botones .js-enroll) =====
+  document.addEventListener('DOMContentLoaded', function(){
+    const emailInput = document.getElementById('pricingEmail'); // campo principal
+    const emailError = document.getElementById('pricingEmailError');
+    const enrollButtons = document.querySelectorAll('.js-enroll');
+
+    // Si falta el campo de email o no hay botones, salir sin romper
+    if(!emailInput || enrollButtons.length === 0) return;
+
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const isValid = v => re.test(String(v||'').trim());
+
+    function indicateError(show){
+      if(!emailError) return;
+      emailError.style.display = show ? 'block' : 'none';
+      emailInput.classList.toggle('error', show);
+      if(show) emailInput.setAttribute('aria-invalid','true'); else emailInput.removeAttribute('aria-invalid');
+    }
+
+    function handleClick(e){
+      const ok = isValid(emailInput.value);
+      if(!ok){
+        e.preventDefault();
+        indicateError(true);
+        emailInput.focus();
+        emailInput.scrollIntoView({behavior:'smooth', block:'center'});
+        return;
+      }
+      // Adjuntar email como query param al checkout
+      try{
+        const base = e.currentTarget.getAttribute('data-checkout') || e.currentTarget.href;
+        const url = new URL(base, window.location.origin);
+        url.searchParams.set('email', String(emailInput.value).trim());
+        e.currentTarget.href = url.toString();
+      }catch(_){ /* si no es URL absoluta, seguimos sin modificar */ }
+    }
+
+    // Escuchar click en TODOS los CTAs de “Enroll Now — $20”
+    enrollButtons.forEach(btn=>{
+      btn.addEventListener('click', handleClick);
+    });
+
+    // Validación reactiva al teclear
+    emailInput.addEventListener('input', ()=>{
+      indicateError(!isValid(emailInput.value));
+    });
+  });
+</script>
+<script>
+(function(){
+  const FLOW_URL = "https://prod-85.westus.logic.azure.com:443/workflows/a15e32f673dc4624b6d73ec979238804/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=VwyY5R-_TBFDEfoAupMFarmhkjQsGUB5ILXsvVZbhpI";
+
+  const emailInput = document.getElementById('pricingEmail');
+  const enrollButtons = document.querySelectorAll('.js-enroll');
+  if (!emailInput || enrollButtons.length === 0) return;
+
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+  const isValid = v => re.test(String(v||'').trim());
+
+  function sendEmail(email){
+    const body = JSON.stringify({
+      email: String(email).trim(),
+      source: 'pricing_cta',
+      ts: new Date().toISOString()
+    });
+
+    let sent = false;
+    try {
+      if (navigator.sendBeacon) {
+        sent = navigator.sendBeacon(FLOW_URL, body); // text/plain implícito
+      }
+    } catch (_) {}
+
+    if (!sent) {
+      try {
+        fetch(FLOW_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: body,
+          keepalive: true
+        }).catch(()=>{});
+      } catch (_) {}
+    }
+  }
+
+  // No prevenimos la navegación: solo disparamos el envío si el email es válido
+  enrollButtons.forEach(btn => {
+    btn.addEventListener('click', function(){
+      const v = emailInput.value;
+      if (isValid(v)) sendEmail(v);
+      // La validación/prevención de navegación ya la maneja tu código existente
+    }, { passive: true });
+  });
+})();
+</script>
+</body>
+</html>
